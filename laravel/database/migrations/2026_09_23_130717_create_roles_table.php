@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+
+    public function up(): void
+    {
+        Schema::create('roles', function (Blueprint $table) {
+
+            $table->id();
+
+            $table->string('nama_role');
+
+            $table->string('kode_role')
+                ->unique();
+
+            $table->text('deskripsi')
+                ->nullable();
+
+            $table->boolean('status')
+                ->default(true);
+
+            $table->timestamps();
+
+        });
+    }
+
+
+    public function down(): void
+    {
+        Schema::dropIfExists('roles');
+    }
+
+};

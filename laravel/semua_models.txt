@@ -1,0 +1,464 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class AlokasiPenjualan extends Model
+{
+    protected $table = 'alokasi_penjualans';
+
+    protected $primaryKey = 'id_lokasi';
+
+
+    protected $fillable = [
+        'id_detpenjualan',
+        'id_panen',
+        'jumlah',
+        'satuan',
+        'keterangan',
+    ];
+
+
+    public function detailPenjualan()
+    {
+        return $this->belongsTo(
+            DetailPenjualan::class,
+            'id_detpenjualan',
+            'id_detpenjualan'
+        );
+    }
+
+
+    public function panen()
+    {
+        return $this->belongsTo(
+            Panen::class,
+            'id_panen',
+            'id_panen'
+        );
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Bahan extends Model
+{
+    protected $table = 'bahans';
+
+    protected $primaryKey = 'id_bahan';
+
+    protected $fillable = [
+        'kode_bahan',
+        'nama_bahan',
+        'jenis_bahan',
+        'satuan_bahan',
+        'stok',
+        'stok_minimum',
+    ];
+    public function mutasi()
+    {
+    return $this->hasMany(Mutasi::class, 'id_bahan');
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class BatchTanam extends Model
+{
+    protected $table = 'batch_tanams';
+
+    protected $primaryKey = 'id_batch';
+
+    protected $fillable = [
+        'kode_batch',
+        'id_varietas',
+        'tanggal_tanam',
+        'jumlah_tanam',
+        'status',
+        'keterangan',
+    ];
+    public function varietas()
+    {
+    return $this->belongsTo(Varietas::class, 'id_varietas');
+    }
+    public function riwayatTanam()
+    {
+    return $this->hasMany(RiwayatTanam::class, 'id_batch');
+    }
+    public function panen()
+    {
+    return $this->hasMany(Panen::class, 'id_batch');
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class DetailPenjualan extends Model
+{
+    protected $table = 'detail_penjualans';
+
+    protected $primaryKey = 'id_detpenjualan';
+
+    protected $fillable = [
+        'id_sayur',
+        'id_penjualan',
+        'jumlah',
+        'satuan',
+        'harga_satuan',
+        'subtotal',
+        'keterangan',
+    ];
+    public function penjualan()
+    {
+    return $this->belongsTo(Penjualan::class, 'id_penjualan');
+    }
+    public function sayur()
+    {
+    return $this->belongsTo(Sayur::class, 'id_sayur');
+    }
+    public function alokasiPenjualan()
+    {
+    return $this->hasMany(AlokasiPenjualan::class, 'id_detpenjualan');
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class HargaSayur extends Model
+{
+    protected $table = 'harga_sayurs';
+
+    protected $primaryKey = 'id_harga';
+
+    protected $fillable = [
+        'id_sayur',
+        'id_jenpelanggan',
+        'harga',
+        'satuan',
+        'tanggal_mulai',
+        'tanggal_akhir',
+    ];
+    public function sayur()
+    {
+    return $this->belongsTo(Sayur::class, 'id_sayur');
+    }   
+    public function jenisPelanggan()
+    {
+    return $this->belongsTo(JenisPelanggan::class, 'id_jenpelanggan');
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class JenisPelanggan extends Model
+{
+    protected $table = 'jenis_pelanggans';
+
+    protected $primaryKey = 'id_jenpelanggan';
+
+    protected $fillable = [
+        'jenis_pelanggan',
+    ];
+
+
+    public function hargaSayur()
+    {
+        return $this->hasMany(
+            HargaSayur::class,
+            'id_jenpelanggan',
+            'id_jenpelanggan'
+        );
+    }
+
+
+    public function pelanggan()
+    {
+        return $this->hasMany(
+            Pelanggan::class,
+            'id_jenpelanggan',
+            'id_jenpelanggan'
+        );
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Mutasi extends Model
+{
+    protected $table = 'mutasis';
+
+    protected $primaryKey = 'id_mutasi';
+
+    protected $fillable = [
+        'id_bahan',
+        'tanggal',
+        'jenis_mutasi',
+        'jumlah',
+        'stok_sebelum',
+        'stok_sesudah',
+        'referensi',
+    ];
+    public function bahan()
+    {
+    return $this->belongsTo(Bahan::class, 'id_bahan');
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Panen extends Model
+{
+    protected $table = 'panens';
+
+    protected $primaryKey = 'id_panen';
+
+    protected $fillable = [
+        'id_batch',
+        'tanggal_panen',
+        'jumlah_tanaman',
+        'berat_panen',
+        'satuan_berat',
+        'kualitas',
+        'catatan',
+    ];
+    public function batchTanam()
+    {
+    return $this->belongsTo(BatchTanam::class, 'id_batch');
+    }
+    public function alokasiPenjualan()
+    {
+    return $this->hasMany(AlokasiPenjualan::class, 'id_panen');
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Pelanggan extends Model
+{
+    protected $table = 'pelanggans';
+
+    protected $primaryKey = 'id_pelanggan';
+
+    protected $fillable = [
+        'id_jenpelanggan',
+        'nama_pelanggan',
+        'no_hp',
+        'alamat',
+    ];
+
+
+    public function jenisPelanggan()
+    {
+        return $this->belongsTo(
+            JenisPelanggan::class,
+            'id_jenpelanggan',
+            'id_jenpelanggan'
+        );
+    }
+
+
+    public function penjualan()
+    {
+        return $this->hasMany(
+            Penjualan::class,
+            'id_pelanggan'
+        );
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Pengeluaran extends Model
+{
+    protected $table = 'pengeluarans';
+
+    protected $primaryKey = 'id_pengeluaran';
+
+    protected $fillable = [
+        'tanggal',
+        'kategori',
+        'keterangan',
+        'nominal',
+        'metode_pembayaran',
+        'referensi',
+    ];
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Penjualan extends Model
+{
+    protected $table = 'penjualans';
+
+    protected $primaryKey = 'id_penjualan';
+
+    protected $fillable = [
+        'kode_penjualan',
+        'id_pelanggan',
+        'tanggal_penjualan',
+        'total',
+        'status',
+        'keterangan',
+    ];
+    public function pelanggan()
+    {
+    return $this->belongsTo(Pelanggan::class, 'id_pelanggan');
+    }
+    public function detailPenjualan()
+    {
+    return $this->hasMany(DetailPenjualan::class, 'id_penjualan');
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class RiwayatTanam extends Model
+{
+    protected $table = 'riwayat_tanams';
+
+    protected $primaryKey = 'id_riwtanam';
+
+    protected $fillable = [
+        'id_batch',
+        'id_talang',
+        'tanggal',
+        'tahap',
+        'kegiatan',
+        'jumlah_tanaman',
+        'kondisi',
+        'keterangan',
+    ];
+    public function batchTanam()
+    {
+    return $this->belongsTo(BatchTanam::class, 'id_batch');
+    }
+}<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Sayur extends Model
+{
+    protected $table = 'sayurs';
+    protected $primaryKey = 'id_sayur';
+    protected $fillable = [
+        'kode_sayur',
+        'nama_sayur',
+        'durasi_semai',
+        'durasi_remaja',
+        'durasi_panen',
+    ];
+    public function varietas()
+    {
+        return $this->hasMany(Varietas::class, 'id_sayur');
+    }
+    public function detailPenjualan()
+    {
+    return $this->hasMany(DetailPenjualan::class, 'id_sayur');
+    }
+    public function hargaSayur()
+    {
+    return $this->hasMany(HargaSayur::class, 'id_sayur');
+    }
+}
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Talang extends Model
+{
+    protected $table = 'talangs';
+
+    protected $primaryKey = 'id_talang';
+
+    protected $fillable = [
+        'kode_talang',
+        'tipe_talang',
+        'kapasitas',
+        'keterangan',
+    ];
+}<?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+#[Fillable(['name', 'email', 'password'])]
+#[Hidden(['password', 'remember_token'])]
+class User extends Authenticatable
+{
+    /** @use HasFactory<UserFactory> */
+    use HasFactory, Notifiable;
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+}
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Varietas extends Model
+{
+    protected $table = 'varietas';
+
+    protected $primaryKey = 'id_varietas';
+
+    protected $fillable = [
+        'id_sayur',
+        'nama_varietas',
+        'est_bobot',
+        'satuan_bobot',
+    ];
+    public function sayur()
+    {
+        return $this->belongsTo(Sayur::class, 'id_sayur');
+    }
+    public function batchTanam()
+    {
+    return $this->hasMany(BatchTanam::class, 'id_varietas');
+    }
+}

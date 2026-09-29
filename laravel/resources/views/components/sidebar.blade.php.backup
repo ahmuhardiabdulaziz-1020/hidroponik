@@ -1,0 +1,111 @@
+<style>
+.sidebar-link {
+    color: inherit;
+    text-decoration: none;
+}
+</style>
+<div class="sidebar">
+
+<a href="{{ route('dashboard') }}" class="menu">
+🏠 Dashboard
+</a>
+
+
+<div class="menu">
+<b>MASTER DATA</b>
+</div>
+
+<div class="menu">
+ <a href="{{ route('sayur.index') }}" class="sidebar-link">
+    • Sayur
+ </a>
+</div>
+
+<div class="menu">
+<a href="{{ route('varietas.index') }}" class="sidebar-link">
+   • Varietas
+</a>
+</div>
+
+<div class="menu">
+<a href="{{ route('talang.index') }}" class="sidebar-link">
+    • Talang
+</a>
+</div>
+
+<div class="menu">
+<a href="{{ route('bahan.index') }}" class="sidebar-link">
+    • Bahan
+</a>
+</div>
+<div class="menu">
+<a href="{{ route('jenis-pelanggan.index') }}" class="sidebar-link">
+   • Jenis Pelanggan
+</a>
+</div>
+
+<div class="menu">
+<a href="{{ route('pelanggan.index') }}" class="sidebar-link">
+    • Pelanggan
+</a>
+</div>
+
+<div class="menu">
+<b>PRODUKSI</b>
+</div>
+
+<a href="#" class="menu">
+• Batch Tanam
+</a>
+
+<a href="/produksi/monitoring/tanaman" class="menu">
+• Monitoring Tanaman
+</a>
+
+<a href="#" class="menu">
+• Riwayat
+</a>
+
+<a href="#" class="menu">
+• Panen
+</a>
+
+
+
+
+<div class="menu">
+<b>PERSEDIAAN</b>
+</div>
+
+<div class="menu">
+• Mutasi
+</div>
+
+
+<div class="menu">
+<b>PENJUALAN</b>
+</div>
+
+<div class="menu">
+• Harga
+</div>
+
+<div class="menu">
+• Penjualan
+</div>
+
+
+<div class="menu">
+<b>KEUANGAN</b>
+</div>
+
+<div class="menu">
+• Pengeluaran
+</div>
+
+
+<div class="menu">
+⚙ Pengaturan
+</div>
+
+</div>
